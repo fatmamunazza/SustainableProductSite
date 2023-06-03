@@ -1,0 +1,410 @@
+swagger: "2.0"
+info:
+  title: Applications API
+  version: "1.0.0"
+basePath: /api
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /products/addVendorProduct:
+    post:
+      summary: Add a new product
+      tags:
+        - products
+      parameters:
+        - in: body
+          name: product
+          description: The product to add
+          required: true
+          schema:
+            $ref: "#/definitions/VendorProduct"
+      responses:
+        201:
+          description: Product created successfully
+          schema:
+            $ref: "#/definitions/VendorProduct"
+        400:
+          description: "Invalid input parameters"
+        500:
+          description: "Internal server error"
+  /products/addUserProduct:
+    post:
+      summary: Add a new product
+      tags:
+        - products
+      parameters:
+        - in: body
+          name: product
+          description: The product to add
+          required: true
+          schema:
+            $ref: "#/definitions/UserProduct"
+      responses:
+        201:
+          description: Product created successfully
+          schema:
+            $ref: "#/definitions/UserProduct"
+        400:
+          description: "Invalid input parameters"
+        500:
+          description: "Internal server error"
+  /products/getProducts/{id}:
+    get:
+      summary: Get products by user ID
+      tags:
+        - products
+      parameters:
+        - name: id
+          in: path
+          description: The user ID to retrieve products for
+          required: true
+          type: string
+      responses:
+        "200":
+          description: A list of products for the user
+          schema:
+            type: array
+            items:
+              type: object
+        "404":
+          description: User not found
+          schema:
+            $ref: "#/definitions/Error"
+  /products/getAllProducts:
+    get:
+      summary: Get all products of Vendor
+      tags:
+        - products
+      parameters:
+        - name: page
+          in: query
+          description: The page number to retrieve
+          type: integer
+          default: 1
+        - name: limit
+          in: query
+          description: The number of products per page
+          type: integer
+          default: 10
+      responses:
+        "200":
+          description: A list of products for the user
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/VendorProduct"
+        "404":
+          description: User not found
+          schema:
+            $ref: "#/definitions/Error"
+  /blogs/addBlog:
+    post:
+      summary: Add a new blog
+      tags:
+        - blogs
+      parameters:
+        - in: body
+          name: blog
+          description: The blog to add
+          required: true
+          schema:
+            $ref: "#/definitions/Blog"
+      responses:
+        201:
+          description: Blog created successfully
+          schema:
+            $ref: "#/definitions/Blog"
+        400:
+          description: "Invalid input parameters"
+        500:
+          description: "Internal server error"
+  /blogs/getBlogs/{id}:
+    get:
+      summary: Get blogs by author ID
+      tags:
+        - blogs
+      parameters:
+        - name: id
+          in: path
+          description: The author ID to retrieve blogs for
+          required: true
+          type: string
+      responses:
+        "200":
+          description: A list of blogs for the author
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Blog"
+        "404":
+          description: Author not found
+          schema:
+            $ref: "#/definitions/Error"
+  /blogs/getBlog/{id}:
+    get:
+      summary: Get blog by ID
+      tags:
+        - blogs
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Blog details
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Blog"
+        "404":
+          description: Blog not found
+          schema:
+            $ref: "#/definitions/Error"
+  /blogs/getAllBlogs:
+    get:
+      summary: Get all blogs of Vendor
+      tags:
+        - blogs
+      parameters:
+        - name: page
+          in: query
+          description: The page number to retrieve
+          type: integer
+          default: 1
+        - name: limit
+          in: query
+          description: The number of blogs per page
+          type: integer
+          default: 10
+      responses:
+        "200":
+          description: A list of blogs for the author
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Blog"
+        "404":
+          description: Author not found
+          schema:
+            $ref: "#/definitions/Error"
+  /getUserDataById/{id}:
+    get:
+      summary: Get user details by user ID
+      tags:
+        - user
+      parameters:
+        - name: id
+          in: path
+          description: The user ID to retrieve user details
+          required: true
+          type: string
+      responses:
+        "200":
+          description: User details
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/User"
+        "404":
+          description: User not found
+          schema:
+            $ref: "#/definitions/Error"
+  /cart/addProducts:
+    post:
+      summary: Add products in cart
+      tags:
+        - cart
+      parameters:
+        - name: userId
+          in: query
+          description: The user id
+          type: string
+          required: true
+        - name: quantity
+          in: query
+          type: number
+          required: true
+        - in: body
+          name: productDetails
+          description: The product details to add in cart
+          required: true
+          schema:
+            $ref: "#/definitions/CartProductDetails"
+      responses:
+        201:
+          description: Cart created successfully
+          schema:
+            $ref: "#/definitions/Cart"
+        400:
+          description: "Invalid input parameters"
+        500:
+          description: "Internal server error"
+  /cart/getAllProductsByUserId/{id}:
+    get:
+      summary: Get all cart products by user ID
+      tags:
+        - cart
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: A list of blogs for the author
+          schema:
+            type: array
+            items:
+              type: object
+        "404":
+          description: Author not found
+          schema:
+            $ref: "#/definitions/Error"
+definitions:
+  Error:
+    type: object
+    properties:
+      message:
+        type: string
+        description: A description of the error
+  UserProduct:
+    type: object
+    properties:
+      _id:
+        type: string
+        description: The product ID
+      title:
+        type: string
+        description: The product title
+      description:
+        type: string
+        description: The product description
+      price:
+        type: number
+        description: The product price
+      userId:
+        type: string
+        description: The vendor ID
+      serialNo:
+        type: integer
+        description: The product serial number
+      imageUrl:
+        type: string
+        description: The product image URL
+      quantity:
+        type: number
+  VendorProduct:
+    type: object
+    properties:
+      _id:
+        type: string
+        description: The product ID
+      title:
+        type: string
+        description: The product title
+      description:
+        type: string
+        description: The product description
+      price:
+        type: number
+        description: The product price
+      vendorId:
+        type: string
+        description: The vendor ID
+      vendorName:
+        type: string
+        description: The vendor name
+      imageUrl:
+        type: string
+        description: The product image URL
+      quantity:
+        type: number
+  Blog:
+    type: object
+    properties:
+      _id:
+        type: string
+        description: The blog ID
+      title:
+        type: string
+        description: The blog title
+      subheading:
+        type: string
+        description: The blog subheading
+      description:
+        type: string
+        description: The blog description
+      videoUrl:
+        type: string
+        description: The blog videoUrl
+      authorId:
+        type: string
+        description: The author ID
+      author:
+        type: string
+        description: The author name
+      imgUrls:
+        type: array
+        items:
+          type: string
+        description: The blog image URL
+  User:
+    type: object
+    properties:
+      _id:
+        type: string
+        description: The user ID
+      name:
+        type: string
+        description: The name of user
+      email:
+        type: string
+        description: The emailId of user
+      role:
+        type: string
+        description: The role type of user. eg - vendor or subscriber
+      products:
+        type: array
+        items:
+          type: string
+        description: The productId list
+      blogs:
+        type: array
+        items:
+          type: string
+        description: The blogId list
+      carts:
+        type: string
+        description: The cartId list
+      rewardsPoint:
+        type: number
+        description: The total rewards point of user
+  CartProductDetails:
+    type: object
+    properties:
+      productId:
+        type: string
+        description: The product ID
+      title:
+        type: string
+        description: The product title
+      description:
+        type: string
+        description: The product description
+      price:
+        type: number
+        description: The product price
+      vendorId:
+        type: string
+        description: The vendor ID
+      vendorName:
+        type: string
+        description: The vendor name
+      imageUrl:
+        type: string
+        description: The product image URL
+      quantity:
+        type: number
